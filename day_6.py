@@ -15,11 +15,9 @@ direction_dict = {
 
 directions = ['^', '>', 'v', '<']
 
-print(directions[0 % 4])
 
 
-
-guard_map = [
+test_guard_map = [
     "....#.....",
     ".........#",
     "..........",
@@ -31,6 +29,18 @@ guard_map = [
     "#.........",
     "......#..."
 ]
+
+day_6_input = []
+
+def get_day_6_input():
+    with open("day_6_input") as file:
+        for line in file:
+            day_6_input.append(line.rstrip())
+    return day_6_input
+
+get_day_6_input()
+
+guard_map = day_6_input
 
 def find_guard_position():
     for i in range(len(guard_map) - 1):
@@ -53,49 +63,34 @@ def mark_x(row, column):
 def move_guard(row, column):
     mark_x(row, column)
     counter = 1
-    finished = False
-    i = 0
+    direction_index = 0
 
+    while True:
+        direction = directions[direction_index % 4]
+        move_row, move_column = direction_dict[direction]
 
-    while row < len(guard_map) and column < len(guard_map[0]) and not finished:
-        direction = directions[i % 4]
-        print(direction)
-        move_row, move_column = direction_dict.get(direction)
-        print(move_row)
-        i += 1
-        try:
+        next_row, next_column = row + move_row, column + move_column
+
+        if not (0 <= next_row < len(guard_map) and 0 <= next_column < len(guard_map[0])):
+            break
+
+        if guard_map[next_row][next_column] == "#":
+            direction_index += 1
+        else:
+            row, column = next_row, next_column
             if guard_map[row][column] == ".":
                 mark_x(row, column)
                 counter += 1
 
-            if guard_map[row + move_row][column + move_column] == "#":
-                break
+    return counter
 
-            if guard_map[row + move_row][column + move_column] is None:
-                print("done!")
-                finished = True
-                return row, column, counter, finished
 
-        except IndexError:
-            print("out of range")
-            pass
-
-        row += move_row
-        column += move_column
+start_row, start_column = find_guard_position()[0], find_guard_position()[1]
 
 
 
 
-    return row, column, counter, finished
-
-
-start_row, start_column = find_guard_position()
-
-
-row, column, counter, finished = move_guard(start_row, start_column)
-print(counter)
-
-
+print(move_guard(start_row, start_column))
 
 
 for x in guard_map:
