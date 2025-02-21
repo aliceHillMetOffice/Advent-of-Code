@@ -61,7 +61,7 @@ def count_diagonals_down_and_left(wordsearch, x, m, a, s):
     return count
 
 
-if __name__ == "__main__":
+def part_1():
     wordsearch = prep_wordsearch()
     total = count_forward_and_back(wordsearch)
     total += count_diagonals_down_and_right(wordsearch, "X", "M", "A", "S")
@@ -70,4 +70,50 @@ if __name__ == "__main__":
     total += count_diagonals_down_and_left(wordsearch, "S", "A", "M", "X")
     total += count_vertical_down(wordsearch, "X", "M", "A", "S")
     total += count_vertical_down(wordsearch, "S", "A", "M", "X")
-    print(total)
+    return total
+
+#part_1()
+
+
+def part_2():
+    wordsearch = prep_wordsearch()
+    count = 0
+    for row in range(1, len(wordsearch) - 1):
+        for column in range(1, len(wordsearch[row]) - 1):
+
+
+            if wordsearch[row][column] == "A":
+                top_left = wordsearch[row - 1][column - 1]
+                top_right = wordsearch[row - 1][column + 1]
+                bottom_left = wordsearch[row + 1][column - 1]
+                bottom_right = wordsearch[row + 1][column + 1]
+
+                if (top_left == "M" and top_right == "M") and (bottom_left == "S" and bottom_right == "S"):
+                    count += 1
+
+
+                    #print(row, column, "case1")
+
+                elif (top_left == "S" and top_right == "S") and (bottom_left == "M" and bottom_right == "M"):
+                    count += 1
+
+                    #print(row, column, "case2")
+                elif (top_left == "S" and bottom_left == "S") and (top_right == "M" and bottom_right == "M"):
+                    count += 1
+                    #print(row, column, "case3")
+                elif (top_left == "M" and bottom_left == "M") and (top_right == "S" and bottom_right == "S"):
+                    count += 1
+                    #print(row, column, "case4")
+
+
+
+
+    return count
+
+for row in test_wordsearch:
+    print(row)
+
+
+print(part_1())
+
+print(part_2())
